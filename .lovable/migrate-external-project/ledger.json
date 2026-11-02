@@ -1,0 +1,9 @@
+[
+ {"capability":"code","source":"bolt zip","outcome":"migrate","status":"done","next_action":null},
+ {"capability":"schema+RLS+RPCs","source":"supabase/migrations","outcome":"migrate","status":"done","next_action":null},
+ {"capability":"records (events, sponsors, links, content, memberships, registrations)","source":"bolt supabase","outcome":"migrate","status":"pending","next_action":"user exports CSVs"},
+ {"capability":"auth identities (admins)","source":"supabase auth","outcome":"migrate","status":"pending","next_action":"user exports admin emails+ids; create accounts and admin_users rows"},
+ {"capability":"storage","source":"none (logo/sponsor images are https URLs)","outcome":"n/a","status":"verified","next_action":null},
+ {"capability":"edge functions/webhooks/schedules/payments","source":"none","outcome":"n/a","status":"verified","next_action":null},
+ {"capability":"verification","source":"-","outcome":"-","status":"partial","next_action":"admin sign-in once an admin exists"}
+]
