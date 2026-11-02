@@ -27,10 +27,17 @@ function systemPrefersDark(): boolean {
 }
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeChoice>(() => readStoredChoice(THEME_KEY, THEMES, 'system'));
-  const [fontScale, setFontScaleState] = useState<FontScale>(() => readStoredChoice(FONT_KEY, FONTS, 'normal'));
-  const [highContrast, setHighContrastState] = useState<boolean>(() => readStoredChoice(CONTRAST_KEY, CONTRAST_VALUES, 'off') === 'on');
-  const [systemDark, setSystemDark] = useState<boolean>(() => systemPrefersDark());
+  const [theme, setThemeState] = useState<ThemeChoice>('system');
+  const [fontScale, setFontScaleState] = useState<FontScale>('normal');
+  const [highContrast, setHighContrastState] = useState<boolean>(false);
+  const [systemDark, setSystemDark] = useState<boolean>(false);
+
+  useEffect(() => {
+    setThemeState(readStoredChoice(THEME_KEY, THEMES, 'system'));
+    setFontScaleState(readStoredChoice(FONT_KEY, FONTS, 'normal'));
+    setHighContrastState(readStoredChoice(CONTRAST_KEY, CONTRAST_VALUES, 'off') === 'on');
+    setSystemDark(systemPrefersDark());
+  }, []);
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-color-scheme: dark)');

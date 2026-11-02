@@ -19,7 +19,11 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 const dictionaries = { en, ar } as const;
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => readStoredChoice(LANGUAGE_KEY, LANGUAGES, 'en'));
+  const [language, setLanguageState] = useState<Language>('en');
+
+  useEffect(() => {
+    setLanguageState(readStoredChoice(LANGUAGE_KEY, LANGUAGES, 'en'));
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;
