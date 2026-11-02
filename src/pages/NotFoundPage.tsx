@@ -8,7 +8,7 @@ export function NotFoundPage() {
       <p className="eyebrow">404</p>
       <h1 className="text-4xl">{t('notFoundTitle')}</h1>
       <p className="text-lg text-muted">{t('notFoundBody')}</p>
-      <a href="#/" className="btn-primary">
+      <a href="/" className="btn-primary">
         {t('backHome')}
         <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
       </a>

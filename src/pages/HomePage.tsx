@@ -41,11 +41,11 @@ export function HomePage() {
           <h1 className="max-w-3xl text-4xl text-white sm:text-6xl">{getText('hero_title') || t('brand')}</h1>
           <p className="max-w-2xl text-lg leading-relaxed text-white/90">{getText('hero_subtitle')}</p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <a href="#/membership" className="btn-primary">
+            <a href="/membership" className="btn-primary">
               {t('heroCtaJoin')}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
             </a>
-            <a href="#/events" className="btn-secondary border-white/40 bg-black/40 text-white hover:border-gold hover:text-gold">
+            <a href="/events" className="btn-secondary border-white/40 bg-black/40 text-white hover:border-gold hover:text-gold">
               {t('heroCtaEvents')}
             </a>
           </div>
@@ -63,9 +63,9 @@ export function HomePage() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {[
-            { icon: Users, title: t('cardJoinTitle'), body: t('cardJoinBody'), href: '#/membership' },
-            { icon: Trophy, title: t('cardEventsTitle'), body: t('cardEventsBody'), href: '#/events' },
-            { icon: Shield, title: t('cardSponsorsTitle'), body: t('cardSponsorsBody'), href: '#/sponsors' },
+            { icon: Users, title: t('cardJoinTitle'), body: t('cardJoinBody'), href: '/membership' },
+            { icon: Trophy, title: t('cardEventsTitle'), body: t('cardEventsBody'), href: '/events' },
+            { icon: Shield, title: t('cardSponsorsTitle'), body: t('cardSponsorsBody'), href: '/sponsors' },
           ].map(({ icon: Icon, title, body, href }) => (
             <a key={href} href={href} className="card group flex flex-col gap-4 hover:-translate-y-1 hover:border-gold">
               <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gold">
@@ -85,7 +85,7 @@ export function HomePage() {
               <p className="eyebrow mb-2">{t('navEvents')}</p>
               <h2 className="text-3xl">{t('eventsPreviewTitle')}</h2>
             </div>
-            <a href="#/events" className="btn-ghost">
+            <a href="/events" className="btn-ghost">
               {t('eventsViewAll')}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
             </a>

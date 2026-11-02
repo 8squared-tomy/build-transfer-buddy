@@ -11,10 +11,10 @@ export function SiteHeader({ path, logoUrl }: { path: string; logoUrl: string | 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const items: NavItem[] = [
-    { href: '#/', label: t('navHome'), match: '/' },
-    { href: '#/membership', label: t('navMembership'), match: '/membership' },
-    { href: '#/events', label: t('navEvents'), match: '/events' },
-    { href: '#/sponsors', label: t('navSponsors'), match: '/sponsors' },
+    { href: '/', label: t('navHome'), match: '/' },
+    { href: '/membership', label: t('navMembership'), match: '/membership' },
+    { href: '/events', label: t('navEvents'), match: '/events' },
+    { href: '/sponsors', label: t('navSponsors'), match: '/sponsors' },
   ];
 
   const isActive = (item: NavItem) =>
@@ -23,7 +23,7 @@ export function SiteHeader({ path, logoUrl }: { path: string; logoUrl: string | 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-app/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <a href="#/" className="flex items-center gap-3 rounded-md" aria-label={`${t('brand')} ${t('brandTagline')}`}>
+        <a href="/" className="flex items-center gap-3 rounded-md" aria-label={`${t('brand')} ${t('brandTagline')}`}>
           <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold bg-surface">
             <SiteLogo url={logoUrl} className="h-6 w-6" />
           </span>

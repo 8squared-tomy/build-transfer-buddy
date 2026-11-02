@@ -32,11 +32,11 @@ export function SiteLayout({ path, children }: { path: string; children: ReactNo
           </div>
           <nav aria-label={t('footerNav')} className="md:justify-self-end">
             <ul className="grid grid-cols-2 gap-x-8 gap-y-2">
-              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="#/">{t('navHome')}</a></li>
-              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="#/membership">{t('navMembership')}</a></li>
-              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="#/events">{t('navEvents')}</a></li>
-              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="#/sponsors">{t('navSponsors')}</a></li>
-              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="#/terms">{t('navLegal')}</a></li>
+              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="/">{t('navHome')}</a></li>
+              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="/membership">{t('navMembership')}</a></li>
+              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="/events">{t('navEvents')}</a></li>
+              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="/sponsors">{t('navSponsors')}</a></li>
+              <li><a className="inline-flex min-h-11 items-center hover:text-gold" href="/terms">{t('navLegal')}</a></li>
             </ul>
           </nav>
         </div>

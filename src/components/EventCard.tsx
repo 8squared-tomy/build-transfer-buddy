@@ -54,7 +54,7 @@ export function EventCard({ event, confirmedCount }: { event: ClubEvent; confirm
           </li>
         )}
       </ul>
-      <a href={`#/events/${event.id}`} className="btn-secondary mt-auto w-full sm:w-auto sm:self-start">
+      <a href={`/events/${event.id}`} className="btn-secondary mt-auto w-full sm:w-auto sm:self-start">
         {t('open')}
         <span className="sr-only">: {title}</span>
       </a>

@@ -25,7 +25,7 @@ export function EventDetailPage({ eventId }: { eventId: string }) {
   }, [eventId]);
 
   const backLink = (
-    <a href="#/events" className="btn-ghost px-0">
+    <a href="/events" className="btn-ghost px-0">
       <ArrowLeft className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
       {t('backToEvents')}
     </a>
