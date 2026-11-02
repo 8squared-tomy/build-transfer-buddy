@@ -150,3 +150,8 @@
     @apply text-sm font-medium uppercase tracking-widest text-gold;
   }
 }
+
+@layer base {
+  *, ::before, ::after { border-color: var(--color-border); }
+  button:not(:disabled), [role='button']:not(:disabled) { cursor: pointer; }
+}
