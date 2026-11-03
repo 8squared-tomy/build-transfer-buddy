@@ -5,9 +5,8 @@ import { fetchActiveLinks, fetchSiteContent } from '@/lib/publicApi';
 import { useAsyncData } from '@/lib/useAsyncData';
 import { usePublicEvents } from '@/lib/usePublicEvents';
 import { Notice } from '@/components/FormField';
-
-const HERO_IMAGE =
-  'https://images.pexels.com/photos/136352/pexels-photo-136352.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
+import { Button } from '@/components/ui/button';
+import chessCover from '@/assets/chess-cover.asset.json';
 
 export function HomePage() {
   const { t, pick } = useLanguage();
@@ -26,28 +25,30 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate overflow-hidden bg-cover text-on-cover">
         <img
-          src={HERO_IMAGE}
+          src={chessCover.url}
           alt={t('heroImageAlt')}
           className="absolute inset-0 -z-10 h-full w-full object-cover"
           width={940}
           height={650}
           fetchPriority="high"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/80 via-black/70 to-black" aria-hidden="true" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cover/80 via-cover/70 to-cover" aria-hidden="true" />
         <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center gap-6 px-4 py-20 sm:px-6">
-          <p className="eyebrow">{t('heroEyebrow')}</p>
-          <h1 className="max-w-3xl text-4xl text-white sm:text-6xl">{getText('hero_title') || t('brand')}</h1>
-          <p className="max-w-2xl text-lg leading-relaxed text-white/90">{getText('hero_subtitle')}</p>
+          <p className="eyebrow text-cover-accent">{t('heroEyebrow')}</p>
+          <h1 className="max-w-3xl text-4xl text-on-cover sm:text-6xl">{getText('hero_title') || t('brand')}</h1>
+          <p className="max-w-2xl text-lg leading-relaxed text-on-cover">{getText('hero_subtitle')}</p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <a href="/membership" className="btn-primary">
               {t('heroCtaJoin')}
               <ArrowRight className="h-4 w-4 rtl:rotate-180" aria-hidden="true" />
             </a>
-            <a href="/events" className="btn-secondary border-white/40 bg-black/40 text-white hover:border-gold hover:text-gold">
+            <Button asChild variant="outline" className="btn-secondary h-auto border-on-cover/40 bg-cover text-on-cover hover:border-cover-accent hover:text-cover-accent">
+            <a href="/events">
               {t('heroCtaEvents')}
             </a>
+            </Button>
           </div>
         </div>
       </section>

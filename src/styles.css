@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/cairo";
 
 @custom-variant dark (&:is([data-theme='dark'] *));
 
@@ -17,7 +19,10 @@
   --color-danger: rgb(var(--c-danger));
   --color-success: rgb(var(--c-success));
   --color-warning: rgb(var(--c-warning));
-  --font-sans: 'Inter', 'Cairo', system-ui, sans-serif;
+  --color-cover: rgb(var(--c-cover));
+  --color-on-cover: rgb(var(--c-on-cover));
+  --color-cover-accent: rgb(var(--c-cover-accent));
+  --font-sans: 'Inter Variable', 'Cairo Variable', system-ui, sans-serif;
 }
 
 
@@ -36,6 +41,9 @@
     --c-success: 22 101 52;
     --c-warning: 120 53 15;
     --c-focus: 110 84 16;
+    --c-cover: 10 10 10;
+    --c-on-cover: 255 255 255;
+    --c-cover-accent: 232 200 100;
     color-scheme: light;
   }
 
@@ -82,12 +90,12 @@
 
   body {
     @apply bg-app text-ink antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans);
     line-height: 1.5;
   }
 
   html[lang='ar'] body {
-    font-family: 'Cairo', 'Inter', system-ui, sans-serif;
+    font-family: 'Cairo Variable', 'Inter Variable', system-ui, sans-serif;
     line-height: 1.7;
   }
 
