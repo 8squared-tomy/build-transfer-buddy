@@ -1,4 +1,5 @@
 import type { TranslationKey } from '@/i18n/translations';
+import { z } from 'zod';
 
 export type FieldErrors<T extends string> = Partial<Record<T, TranslationKey>>;
 
@@ -54,17 +55,33 @@ export type RegistrationInput = {
   email: string;
   university: string;
   phone: string;
+  needsAccommodation: boolean;
+  residence: string;
+  bacRegistrationNumber: string;
 };
+
+export const registrationSchema = z.object({
+  fullName: z.string().trim().min(2, 'errName').max(100, 'errName'),
+  email: z.string().trim().refine(isValidEmail, 'errEmail'),
+  university: z.string().trim().min(2, 'errUniversity').max(120, 'errUniversity'),
+  needsAccommodation: z.boolean(),
+  residence: z.string(),
+  bacRegistrationNumber: z.string(),
+  phone: z.string(),
+}).superRefine((input, ctx) => {
+  if (!input.needsAccommodation) return;
+  if (!lengthBetween(input.residence.trim(), 2, 120)) ctx.addIssue({ code: 'custom', path: ['residence'], message: 'errResidence' });
+  if (!/^\d{1,30}$/.test(input.bacRegistrationNumber.trim())) ctx.addIssue({ code: 'custom', path: ['bacRegistrationNumber'], message: 'errBacNumber' });
+  if (!PHONE_PATTERN.test(input.phone.trim())) ctx.addIssue({ code: 'custom', path: ['phone'], message: 'errAccommodationPhone' });
+});
 
 export function validateRegistration(input: RegistrationInput): FieldErrors<keyof RegistrationInput> {
   const errors: FieldErrors<keyof RegistrationInput> = {};
-  const phone = input.phone.trim();
-
-  if (!lengthBetween(input.fullName.trim(), 2, 100)) errors.fullName = 'errName';
-  if (!isValidEmail(input.email)) errors.email = 'errEmail';
-  if (!lengthBetween(input.university.trim(), 2, 120)) errors.university = 'errUniversity';
-  if (phone && !PHONE_PATTERN.test(phone)) errors.phone = 'errPhone';
-
+  const result = registrationSchema.safeParse(input);
+  if (!result.success) for (const issue of result.error.issues) {
+    const field = issue.path[0] as keyof RegistrationInput;
+    if (!errors[field]) errors[field] = issue.message as TranslationKey;
+  }
   return errors;
 }
 

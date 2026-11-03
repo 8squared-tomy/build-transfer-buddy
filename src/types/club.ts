@@ -68,6 +68,9 @@ export type EventRegistration = {
   email: string;
   university: string;
   phone: string | null;
+  needs_accommodation: boolean;
+  residence: string | null;
+  bac_registration_number: string | null;
   status: RegistrationStatus;
   notes: string | null;
   created_at: string;

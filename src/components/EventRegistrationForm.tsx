@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { CheckCircle2, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { FormField, Notice } from '@/components/FormField';
 import { useLanguage } from '@/i18n/LanguageProvider';
 import type { TranslationKey } from '@/i18n/translations';
@@ -8,7 +9,7 @@ import type { EventState } from '@/lib/events';
 import { validateRegistration, type FieldErrors, type RegistrationInput } from '@/lib/validation';
 import type { RegistrationStatus } from '@/types/club';
 
-const EMPTY_FORM: RegistrationInput = { fullName: '', email: '', university: '', phone: '' };
+const EMPTY_FORM: RegistrationInput = { fullName: '', email: '', university: '', phone: '', needsAccommodation: false, residence: '', bacRegistrationNumber: '' };
 
 type Props = {
   eventId: string;
@@ -85,6 +86,8 @@ export function EventRegistrationForm({ eventId, state, onRegistered }: Props) {
           id="reg-fullName"
           name="fullName"
           autoComplete="name"
+          maxLength={100}
+          required
           className="input"
           value={form.fullName}
           onChange={(event) => update('fullName')(event.target.value)}
@@ -96,6 +99,8 @@ export function EventRegistrationForm({ eventId, state, onRegistered }: Props) {
           id="reg-email"
           name="email"
           type="email"
+          maxLength={254}
+          required
           inputMode="email"
           autoComplete="email"
           dir="ltr"
@@ -110,17 +115,41 @@ export function EventRegistrationForm({ eventId, state, onRegistered }: Props) {
           id="reg-university"
           name="university"
           autoComplete="organization"
+          maxLength={120}
+          required
           className="input"
           value={form.university}
           onChange={(event) => update('university')(event.target.value)}
           aria-invalid={Boolean(errors.university)}
         />
       </FormField>
-      <FormField label={`${t('fieldPhone')} (${t('optional')})`} htmlFor="reg-phone" error={errors.phone && t(errors.phone)}>
+      <fieldset className="space-y-4">
+        <legend className="field-label mb-3">{t('accommodationQuestion')}</legend>
+        <div className="flex flex-wrap gap-6">
+          {[true, false].map((value) => (
+            <label key={String(value)} className="flex min-h-11 cursor-pointer items-center gap-2">
+              <input type="radio" name="needsAccommodation" checked={form.needsAccommodation === value} onChange={() => {
+                setForm((current) => ({ ...current, needsAccommodation: value, ...(!value ? { phone: '', residence: '', bacRegistrationNumber: '' } : {}) }));
+                setErrors({});
+              }} />
+              {value ? t('answerYes') : t('answerNo')}
+            </label>
+          ))}
+        </div>
+        {form.needsAccommodation && <div className="space-y-6 border-s-2 border-border ps-4">
+          <FormField label={t('fieldResidence')} htmlFor="reg-residence" required error={errors.residence && t(errors.residence)}>
+            <input id="reg-residence" name="residence" className="input" required maxLength={120} value={form.residence} onChange={(event) => update('residence')(event.target.value)} aria-invalid={Boolean(errors.residence)} />
+          </FormField>
+          <FormField label={t('fieldBacNumber')} htmlFor="reg-bacRegistrationNumber" required error={errors.bacRegistrationNumber && t(errors.bacRegistrationNumber)}>
+            <input id="reg-bacRegistrationNumber" name="bacRegistrationNumber" className="input" required inputMode="numeric" dir="ltr" maxLength={30} value={form.bacRegistrationNumber} onChange={(event) => update('bacRegistrationNumber')(event.target.value)} aria-invalid={Boolean(errors.bacRegistrationNumber)} />
+          </FormField>
+      <FormField label={t('fieldPhone')} htmlFor="reg-phone" required error={errors.phone && t(errors.phone)}>
         <input
           id="reg-phone"
           name="phone"
           type="tel"
+          required
+          maxLength={25}
           autoComplete="tel"
           dir="ltr"
           className="input"
@@ -129,10 +158,12 @@ export function EventRegistrationForm({ eventId, state, onRegistered }: Props) {
           aria-invalid={Boolean(errors.phone)}
         />
       </FormField>
+        </div>}
+      </fieldset>
 
-      <button type="submit" className="btn-primary w-full" disabled={submitting}>
+      <Button type="submit" className="btn-primary h-auto w-full whitespace-normal" disabled={submitting}>
         {submitting ? t('submitting') : isWaitlistOnly ? t('registerWaitlistButton') : t('registerButton')}
-      </button>
+      </Button>
     </form>
   );
 }
