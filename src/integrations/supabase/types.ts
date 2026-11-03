@@ -31,35 +31,44 @@ export type Database = {
       }
       event_registrations: {
         Row: {
+          bac_registration_number: string | null
           created_at: string
           email: string
           event_id: string
           full_name: string
           id: string
+          needs_accommodation: boolean
           notes: string | null
           phone: string | null
+          residence: string | null
           status: string
           university: string
         }
         Insert: {
+          bac_registration_number?: string | null
           created_at?: string
           email: string
           event_id: string
           full_name: string
           id?: string
+          needs_accommodation?: boolean
           notes?: string | null
           phone?: string | null
+          residence?: string | null
           status?: string
           university: string
         }
         Update: {
+          bac_registration_number?: string | null
           created_at?: string
           email?: string
           event_id?: string
           full_name?: string
           id?: string
+          needs_accommodation?: boolean
           notes?: string | null
           phone?: string | null
+          residence?: string | null
           status?: string
           university?: string
         }
@@ -312,16 +321,30 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
-      register_for_event: {
-        Args: {
-          p_email: string
-          p_event_id: string
-          p_full_name: string
-          p_phone: string
-          p_university: string
-        }
-        Returns: string
-      }
+      register_for_event:
+        | {
+            Args: {
+              p_email: string
+              p_event_id: string
+              p_full_name: string
+              p_phone: string
+              p_university: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              p_bac_registration_number: string
+              p_email: string
+              p_event_id: string
+              p_full_name: string
+              p_needs_accommodation: boolean
+              p_phone: string
+              p_residence: string
+              p_university: string
+            }
+            Returns: string
+          }
       submit_membership_request: {
         Args: {
           p_email: string

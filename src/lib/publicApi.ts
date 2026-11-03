@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { registrationSchema } from '@/lib/validation';
 import type { TranslationKey } from '@/i18n/translations';
 import type { ClubEvent, ChessLevel, ExternalLink, RegistrationStatus, Sponsor, SiteContentEntry, YearsPlaying } from '@/types/club';
 
@@ -9,6 +10,9 @@ export function errorKeyFrom(error: { message?: string } | null): TranslationKey
   if (message.includes('RATE_LIMITED')) return 'errRateLimited';
   if (message.includes('ALREADY_REGISTERED')) return 'errAlreadyRegistered';
   if (message.includes('EVENT_UNAVAILABLE')) return 'errEventUnavailable';
+  if (message.includes('INVALID_RESIDENCE')) return 'errResidence';
+  if (message.includes('INVALID_BAC_NUMBER')) return 'errBacNumber';
+  if (message.includes('INVALID_ACCOMMODATION_PHONE')) return 'errAccommodationPhone';
   return 'errGeneric';
 }
 
@@ -107,15 +111,22 @@ export type RegistrationPayload = {
   email: string;
   university: string;
   phone: string;
+  needsAccommodation: boolean;
+  residence: string;
+  bacRegistrationNumber: string;
 };
 
 export async function registerForEvent(payload: RegistrationPayload): Promise<ActionResult<RegistrationStatus>> {
+  if (!registrationSchema.safeParse(payload).success) return { ok: false, errorKey: 'invalidRequired' };
   const { data, error } = await supabase.rpc('register_for_event', {
     p_event_id: payload.eventId,
     p_full_name: payload.fullName,
     p_email: payload.email,
     p_university: payload.university,
-    p_phone: payload.phone,
+    p_phone: payload.needsAccommodation ? payload.phone.trim() : '',
+    p_needs_accommodation: payload.needsAccommodation,
+    p_residence: payload.needsAccommodation ? payload.residence.trim() : '',
+    p_bac_registration_number: payload.needsAccommodation ? payload.bacRegistrationNumber.trim() : '',
   });
   if (error) return { ok: false, errorKey: errorKeyFrom(error) };
   if (data !== 'confirmed' && data !== 'waitlisted') return { ok: false, errorKey: 'errGeneric' };

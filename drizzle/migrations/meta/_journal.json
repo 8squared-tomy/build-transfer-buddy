@@ -8,6 +8,13 @@
       "when": 1793602917692,
       "tag": "0000_club_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793685991906,
+      "tag": "0001_event_accommodation",
+      "breakpoints": true
     }
   ]
 }

@@ -16,3 +16,4 @@
 - tsconfig keeps `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` off; why: migrated code was written without them.
 - Admin access = row in `public.admin_users` checked by `public.is_admin()` in RLS; visitor writes go only through SECURITY DEFINER RPCs (`submit_membership_request`, `register_for_event`).
 - Theme colors are `--c-*` RGB triplets in `src/styles.css`, toggled via `data-theme`/`data-contrast`/`data-font` on `<html>`.
+- Event accommodation is validated by a shared registration schema and a database trigger; the extended registration RPC retains a legacy wrapper so older clients keep working.
