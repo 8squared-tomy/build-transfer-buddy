@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Accessibility, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/i18n/LanguageProvider';
 import { usePreferences, type FontScale, type ThemeChoice } from '@/preferences/PreferencesProvider';
 
@@ -40,16 +41,18 @@ export function AccessibilityMenu() {
 
   return (
     <div ref={containerRef} className="relative">
-      <button
+      <Button
         type="button"
+        variant="outline"
         onClick={() => setOpen((value) => !value)}
+        aria-label={t('accessibility')}
         aria-expanded={open}
         aria-controls={panelId}
-        className="btn-secondary min-h-11 min-w-11 px-3"
+        className="btn-secondary h-auto min-h-11 min-w-11 px-3"
       >
         <Accessibility className="h-5 w-5" aria-hidden="true" />
         <span className="hidden sm:inline">{t('accessibility')}</span>
-      </button>
+      </Button>
 
       {open && (
         <div
