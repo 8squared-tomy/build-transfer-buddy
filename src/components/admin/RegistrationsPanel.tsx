@@ -81,7 +81,10 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
         { header: t('colName'), value: (row) => row.full_name },
         { header: t('colEmail'), value: (row) => row.email },
         { header: t('colUniversity'), value: (row) => row.university },
-        { header: t('colPhone'), value: (row) => row.phone },
+        { header: t('colAccommodation'), value: (row) => row.needs_accommodation ? t('answerYes') : t('answerNo') },
+        { header: t('fieldResidence'), value: (row) => row.needs_accommodation ? row.residence : '—' },
+        { header: t('fieldBacNumber'), value: (row) => row.needs_accommodation ? row.bac_registration_number : '—' },
+        { header: t('colPhone'), value: (row) => row.needs_accommodation ? row.phone : '—' },
         { header: t('colStatus'), value: (row) => t(REGISTRATION_STATUS_KEYS[row.status]) },
         { header: t('colDate'), value: (row) => row.created_at },
       ]);
@@ -175,11 +178,14 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
 
       {rows.length > 0 && (
         <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full min-w-[720px] text-sm">
+          <table className="w-full min-w-[1100px] text-sm">
             <thead className="bg-surface-2 text-muted">
               <tr>
                 <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colName')}</th>
                 <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colUniversity')}</th>
+                <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colAccommodation')}</th>
+                <th scope="col" className="px-4 py-3 text-start font-semibold">{t('fieldResidence')}</th>
+                <th scope="col" className="px-4 py-3 text-start font-semibold">{t('fieldBacNumber')}</th>
                 <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colPhone')}</th>
                 <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colStatus')}</th>
                 <th scope="col" className="px-4 py-3 text-start font-semibold">{t('colDate')}</th>
@@ -194,7 +200,10 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
                     <div dir="ltr" className="text-muted">{row.email}</div>
                   </td>
                   <td className="px-4 py-3">{row.university}</td>
-                  <td dir="ltr" className="px-4 py-3 text-start">{row.phone ?? '-'}</td>
+                  <td className="px-4 py-3">{row.needs_accommodation ? t('answerYes') : t('answerNo')}</td>
+                  <td className="px-4 py-3">{row.needs_accommodation ? row.residence : '—'}</td>
+                  <td dir="ltr" className="px-4 py-3 text-start">{row.needs_accommodation ? row.bac_registration_number : '—'}</td>
+                  <td dir="ltr" className="px-4 py-3 text-start">{row.needs_accommodation ? row.phone : '—'}</td>
                   <td className="px-4 py-3">
                     <label className="sr-only" htmlFor={`reg-status-${row.id}`}>
                       {t('colStatus')}
