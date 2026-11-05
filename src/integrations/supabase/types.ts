@@ -29,6 +29,47 @@ export type Database = {
         }
         Relationships: []
       }
+      club_forms: {
+        Row: {
+          event_id: string | null
+          fields: Json
+          id: string
+          is_published: boolean
+          revision: number
+          scope_key: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          event_id?: string | null
+          fields?: Json
+          id?: string
+          is_published?: boolean
+          revision?: number
+          scope_key: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          event_id?: string | null
+          fields?: Json
+          id?: string
+          is_published?: boolean
+          revision?: number
+          scope_key?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "club_forms_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       club_members: {
         Row: {
           club_role: string
@@ -235,6 +276,57 @@ export type Database = {
         }
         Relationships: []
       }
+      form_submissions: {
+        Row: {
+          answers: Json
+          created_at: string
+          event_id: string | null
+          fields_snapshot: Json
+          form_id: string | null
+          id: string
+          revision: number
+          status: string
+          title_snapshot: string
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          event_id?: string | null
+          fields_snapshot: Json
+          form_id?: string | null
+          id?: string
+          revision: number
+          status?: string
+          title_snapshot: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          event_id?: string | null
+          fields_snapshot?: Json
+          form_id?: string | null
+          id?: string
+          revision?: number
+          status?: string
+          title_snapshot?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_submissions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_submissions_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "club_forms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       membership_requests: {
         Row: {
           created_at: string
@@ -413,6 +505,10 @@ export type Database = {
             }
             Returns: string
           }
+      submit_club_form: {
+        Args: { p_answers: Json; p_form_id: string; p_revision: number }
+        Returns: string
+      }
       submit_membership_request: {
         Args: {
           p_email: string
