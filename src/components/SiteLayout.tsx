@@ -3,6 +3,7 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { SiteLogo } from '@/components/SiteLogo';
 import { useLanguage } from '@/i18n/LanguageProvider';
 import { useSiteLogo } from '@/lib/useSiteLogo';
+import { SocialLinks } from '@/components/SocialLinks';
 
 export function SiteLayout({ path, children }: { path: string; children: ReactNode }) {
   const { t } = useLanguage();
@@ -29,6 +30,7 @@ export function SiteLayout({ path, children }: { path: string; children: ReactNo
               <span className="font-bold text-gold">{t('brand')}</span>
             </div>
             <p className="max-w-sm text-muted">{t('footerTagline')}</p>
+            <SocialLinks />
           </div>
           <nav aria-label={t('footerNav')} className="md:justify-self-end">
             <ul className="grid grid-cols-2 gap-x-8 gap-y-2">

@@ -15,6 +15,20 @@
       "when": 1793685991906,
       "tag": "0001_event_accommodation",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793861153720,
+      "tag": "0002_club_access_and_members",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793861224402,
+      "tag": "0003_configurable_club_forms",
+      "breakpoints": true
     }
   ]
 }

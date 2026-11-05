@@ -22,6 +22,19 @@
   --color-cover: rgb(var(--c-cover));
   --color-on-cover: rgb(var(--c-on-cover));
   --color-cover-accent: rgb(var(--c-cover-accent));
+  --color-background: rgb(var(--c-app));
+  --color-foreground: rgb(var(--c-text));
+  --color-primary: rgb(var(--c-gold));
+  --color-primary-foreground: rgb(var(--c-on-gold));
+  --color-secondary: rgb(var(--c-surface-2));
+  --color-secondary-foreground: rgb(var(--c-text));
+  --color-accent: rgb(var(--c-surface-2));
+  --color-accent-foreground: rgb(var(--c-text));
+  --color-input: rgb(var(--c-border));
+  --color-ring: rgb(var(--c-focus));
+  --color-muted-foreground: rgb(var(--c-muted));
+  --color-destructive: rgb(var(--c-danger));
+  --color-destructive-foreground: rgb(var(--c-on-cover));
   --font-sans: 'Inter Variable', 'Cairo Variable', system-ui, sans-serif;
 }
 
@@ -77,15 +90,15 @@
   }
 
   html {
-    font-size: 100%;
+    font-size: 93.75%;
   }
 
   html[data-font='large'] {
-    font-size: 112.5%;
+    font-size: 106.25%;
   }
 
   html[data-font='xlarge'] {
-    font-size: 125%;
+    font-size: 118.75%;
   }
 
   body {
@@ -139,7 +152,7 @@
   }
 
   .card {
-    @apply rounded-xl border border-border bg-surface p-6 shadow-sm transition-colors duration-200;
+    @apply rounded-lg border border-border bg-surface p-6 shadow-sm transition-colors duration-200;
   }
 
   .input {

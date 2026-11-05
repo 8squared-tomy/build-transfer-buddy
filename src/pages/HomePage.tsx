@@ -7,6 +7,7 @@ import { usePublicEvents } from '@/lib/usePublicEvents';
 import { Notice } from '@/components/FormField';
 import { Button } from '@/components/ui/button';
 import chessCover from '@/assets/chess-cover.asset.json';
+import { MemberCarousel } from '@/components/MemberCarousel';
 
 export function HomePage() {
   const { t, pick } = useLanguage();
@@ -69,8 +70,8 @@ export function HomePage() {
             { icon: Shield, title: t('cardSponsorsTitle'), body: t('cardSponsorsBody'), href: '/sponsors' },
           ].map(({ icon: Icon, title, body, href }) => (
             <a key={href} href={href} className="card group flex flex-col gap-4 hover:-translate-y-1 hover:border-gold">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gold">
-                <Icon className="h-6 w-6 text-gold" aria-hidden="true" />
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold">
+                <Icon className="h-5 w-5 text-gold" aria-hidden="true" />
               </span>
               <h3 className="text-xl">{title}</h3>
               <p className="text-muted">{body}</p>
@@ -79,6 +80,7 @@ export function HomePage() {
         </div>
       </section>
 
+      <MemberCarousel />
       <section className="border-y border-border bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
