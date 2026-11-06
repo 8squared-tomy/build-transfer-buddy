@@ -13,7 +13,7 @@ import type { ClubEvent } from '@/types/club';
 
 type EditorState = { mode: 'create' } | { mode: 'edit'; event: ClubEvent } | null;
 
-export function EventsPanel() {
+export function EventsPanel({readOnly=false}:{readOnly?:boolean}) {
   const { t, language } = useLanguage();
   const events = useAsyncData(listAdminEvents, []);
   const [editor, setEditor] = useState<EditorState>(null);
@@ -39,10 +39,10 @@ export function EventsPanel() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="max-w-2xl text-muted">{t('eventsAdminIntro')}</p>
-        <button type="button" className="btn-primary" onClick={() => setEditor({ mode: 'create' })}>
+        {!readOnly && <button type="button" className="btn-primary" onClick={() => setEditor({ mode: 'create' })}>
           <Plus className="h-4 w-4" aria-hidden="true" />
           {t('actionNewEvent')}
-        </button>
+        </button>}
       </div>
 
       {actionError && <Notice tone="error">{t(actionError)}</Notice>}
@@ -86,7 +86,7 @@ export function EventsPanel() {
                   {t('actionRegistrations')}
                   <span className="sr-only">: {event.title_en}</span>
                 </button>
-                <button
+                {!readOnly && <button
                   type="button"
                   className="btn-secondary min-h-10 px-3"
                   onClick={() => setEditor({ mode: 'edit', event })}
@@ -94,12 +94,12 @@ export function EventsPanel() {
                   <Pencil className="h-4 w-4" aria-hidden="true" />
                   {t('actionEdit')}
                   <span className="sr-only">: {event.title_en}</span>
-                </button>
-                <button type="button" className="btn-ghost min-h-10 px-3 text-danger" onClick={() => handleDelete(event)}>
+                </button>}
+                {!readOnly && <button type="button" className="btn-ghost min-h-10 px-3 text-danger" onClick={() => handleDelete(event)}>
                   <Trash2 className="h-4 w-4" aria-hidden="true" />
                   {t('actionDelete')}
                   <span className="sr-only">: {event.title_en}</span>
-                </button>
+                </button>}
               </div>
             </li>
           ))}

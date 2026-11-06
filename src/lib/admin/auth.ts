@@ -23,13 +23,13 @@ export async function verifyAdminPassword(password: string): Promise<boolean> {
   return !error;
 }
 
-export async function updateAdminCredentials(attributes: { email?: string; password?: string }): Promise<void> {
+export async function updateAdminCredentials(attributes: { email?: string; password?: string; current_password?: string }): Promise<void> {
   const { error } = await supabase.auth.updateUser(attributes);
   if (error) throw error;
 }
 
 export async function isCurrentUserAdmin(): Promise<boolean> {
-  const { data, error } = await supabase.from('admin_users').select('user_id').maybeSingle();
+  const { data, error } = await supabase.rpc('can_read_admin');
   if (error) throw error;
-  return data !== null;
+  return data === true;
 }
