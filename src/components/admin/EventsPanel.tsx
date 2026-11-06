@@ -21,7 +21,7 @@ export function EventsPanel({readOnly=false}:{readOnly?:boolean}) {
   const [actionError, setActionError] = useState<TranslationKey | null>(null);
 
   if (manageEvent) {
-    return <RegistrationsPanel event={manageEvent} onBack={() => setManageEvent(null)} />;
+    return <RegistrationsPanel event={manageEvent} readOnly={readOnly} onBack={() => setManageEvent(null)} />;
   }
 
   const handleDelete = async (event: ClubEvent) => {

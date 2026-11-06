@@ -18,7 +18,7 @@ import type { ClubEvent, EventRegistration, RegistrationStatus } from '@/types/c
 
 const STATUSES: RegistrationStatus[] = ['confirmed', 'waitlisted', 'cancelled'];
 
-export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack: () => void }) {
+export function RegistrationsPanel({ event, onBack, readOnly=false }: { event: ClubEvent; onBack: () => void; readOnly?:boolean }) {
   const { t, language } = useLanguage();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
@@ -212,7 +212,7 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
                       id={`reg-status-${row.id}`}
                       className="input min-h-10 py-1"
                       value={row.status}
-                      disabled={busyId === row.id}
+                      disabled={readOnly || busyId === row.id}
                       onChange={(e) => handleStatusChange(row, e.target.value as RegistrationStatus)}
                     >
                       {STATUSES.map((value) => (
@@ -226,7 +226,7 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
                     {new Date(row.created_at).toLocaleDateString(language === 'ar' ? 'ar' : 'en-GB')}
                   </td>
                   <td className="px-4 py-3 text-end">
-                    <button
+                    {!readOnly && <button
                       type="button"
                       className="btn-ghost min-h-10 px-3 text-danger"
                       disabled={busyId === row.id}
@@ -235,7 +235,7 @@ export function RegistrationsPanel({ event, onBack }: { event: ClubEvent; onBack
                       <Trash2 className="h-4 w-4" aria-hidden="true" />
                       {t('adminDelete')}
                       <span className="sr-only">: {row.full_name}</span>
-                    </button>
+                    </button>}
                   </td>
                 </tr>
               ))}
