@@ -1,120 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
-import { LogOut } from 'lucide-react';
-import { AccountPanel } from '@/components/admin/AccountPanel';
+import { LogOut, Settings, Lock } from 'lucide-react';
+import { useServerFn } from '@tanstack/react-start';
+import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/Modal';
 import { AdminLogin } from '@/components/admin/AdminLogin';
+import { AccountPanel } from '@/components/admin/AccountPanel';
 import { ContentPanel } from '@/components/admin/ContentPanel';
 import { EventsPanel } from '@/components/admin/EventsPanel';
 import { MembershipsPanel } from '@/components/admin/MembershipsPanel';
 import { PartnersPanel } from '@/components/admin/PartnersPanel';
-import { Notice } from '@/components/FormField';
+import { FormsPanel } from '@/components/admin/FormsPanel';
+import { DirectoryPanel } from '@/components/admin/DirectoryPanel';
+import { SocialPanel } from '@/components/admin/SocialPanel';
+import { SubmissionPanel } from '@/components/admin/SubmissionPanel';
 import { useLanguage } from '@/i18n/LanguageProvider';
-import type { TranslationKey } from '@/i18n/translations';
 import { getCurrentSession, isCurrentUserAdmin, signOutAdmin } from '@/lib/admin/auth';
-
-type Gate = 'checking' | 'signed-out' | 'denied' | 'admin';
-type Tab = 'memberships' | 'events' | 'partners' | 'content' | 'account';
-
-const TABS: { id: Tab; labelKey: TranslationKey }[] = [
-  { id: 'memberships', labelKey: 'adminTabRequests' },
-  { id: 'events', labelKey: 'adminTabEvents' },
-  { id: 'partners', labelKey: 'adminTabSponsors' },
-  { id: 'content', labelKey: 'adminTabContent' },
-  { id: 'account', labelKey: 'adminTabAccount' },
-];
-
-export function AdminPage() {
-  const { t } = useLanguage();
-  const [gate, setGate] = useState<Gate>('checking');
-  const [tab, setTab] = useState<Tab>('memberships');
-
-  const verifyAccess = useCallback(async () => {
-    setGate('checking');
-    try {
-      const session = await getCurrentSession();
-      if (!session) {
-        setGate('signed-out');
-        return;
-      }
-      if (!(await isCurrentUserAdmin())) {
-        await signOutAdmin();
-        setGate('denied');
-        return;
-      }
-      setGate('admin');
-    } catch {
-      setGate('signed-out');
-    }
-  }, []);
-
-  useEffect(() => {
-    void verifyAccess();
-  }, [verifyAccess]);
-
-  const handleSignOut = async () => {
-    try {
-      await signOutAdmin();
-    } finally {
-      setGate('signed-out');
-    }
-  };
-
-  if (gate === 'checking') {
-    return (
-      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-        <p className="text-muted">{t('adminChecking')}</p>
-      </section>
-    );
-  }
-
-  if (gate === 'signed-out' || gate === 'denied') {
-    return (
-      <>
-        {gate === 'denied' && (
-          <div className="mx-auto max-w-md px-4 pt-12 sm:px-6">
-            <Notice tone="error">{t('adminNotAuthorized')}</Notice>
-          </div>
-        )}
-        <AdminLogin onSignedIn={verifyAccess} />
-      </>
-    );
-  }
-
-  return (
-    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl">{t('adminTitle')}</h1>
-        <button type="button" onClick={handleSignOut} className="btn-secondary">
-          <LogOut className="h-4 w-4" aria-hidden="true" />
-          {t('adminLogout')}
-        </button>
-      </div>
-
-      <div role="tablist" aria-label={t('adminTitle')} className="mt-8 flex gap-2 overflow-x-auto border-b border-border pb-px">
-        {TABS.map((item) => (
-          <button
-            key={item.id}
-            id={`tab-${item.id}`}
-            type="button"
-            role="tab"
-            aria-selected={tab === item.id}
-            aria-controls={`panel-${item.id}`}
-            onClick={() => setTab(item.id)}
-            className={`min-h-11 shrink-0 border-b-2 px-4 text-sm font-semibold transition-colors duration-200 ${
-              tab === item.id ? 'border-gold text-gold' : 'border-transparent text-muted hover:text-ink'
-            }`}
-          >
-            {t(item.labelKey)}
-          </button>
-        ))}
-      </div>
-
-      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="mt-8">
-        {tab === 'memberships' && <MembershipsPanel />}
-        {tab === 'events' && <EventsPanel />}
-        {tab === 'partners' && <PartnersPanel />}
-        {tab === 'content' && <ContentPanel />}
-        {tab === 'account' && <AccountPanel />}
-      </div>
-    </section>
-  );
+import { unlockEditor, lockEditor } from '@/lib/admin/access.functions';
+import { supabase } from '@/lib/supabase';
+export function AdminPage(){const {t,language}=useLanguage();const ar=language==='ar';const [gate,setGate]=useState('checking');const [editing,setEditing]=useState(false);const [tab,setTab]=useState('submissions');const [unlock,setUnlock]=useState(false);const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [error,setError]=useState('');const [busy,setBusy]=useState(false);const unlockFn=useServerFn(unlockEditor);const lockFn=useServerFn(lockEditor);
+const verify=useCallback(async()=>{try{const session=await getCurrentSession();if(!session||!(await isCurrentUserAdmin())){setGate('signed-out');return;}setEmail(session.user.email??'');setGate('admin');setEditing(false);}catch{setGate('signed-out');}},[]);useEffect(()=>{void verify();},[verify]);useEffect(()=>{if(!editing)return;const id=setInterval(()=>{void supabase.rpc('is_admin').then(({data})=>{if(!data){setEditing(false);setTab('submissions');}});},30000);return()=>clearInterval(id);},[editing]);
+if(gate==='checking')return <p className="p-8 text-muted">{t('adminChecking')}</p>;if(gate!=='admin')return <AdminLogin onSignedIn={verify}/>;
+const tabs=[{id:'submissions',label:ar?'إجابات النماذج':'Form answers'},{id:'memberships',label:ar?'طلبات الانضمام السابقة':'Previous memberships'},{id:'events',label:t('adminTabEvents')},...(editing?[{id:'forms',label:ar?'النماذج':'Forms'},{id:'directory',label:ar?'الأعضاء':'Members'},{id:'social',label:ar?'التواصل':'Social links'},{id:'partners',label:t('adminTabSponsors')},{id:'content',label:t('adminTabContent')},{id:'account',label:t('adminTabAccount')}]:[])];
+return <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6"><div className="flex flex-wrap items-center justify-between gap-4"><div><h1 className="text-2xl">{t('adminTitle')}</h1><p className="mt-2 text-sm text-muted">{editing?(ar?'وضع التعديل':'Editing mode'):(ar?'للقراءة والتنزيل فقط':'Read and download only')}</p></div><div className="flex gap-2"><Button variant="outline" size="icon" className="min-h-11 min-w-11" title={editing?(ar?'قفل التعديل':'Lock editing'):(ar?'فتح وضع التعديل':'Unlock editing')} aria-label={editing?(ar?'قفل التعديل':'Lock editing'):(ar?'فتح وضع التعديل':'Unlock editing')} onClick={async()=>{if(editing){await lockFn();setEditing(false);setTab('submissions');}else setUnlock(true);}}>{editing?<Lock/>:<Settings/>}</Button><Button variant="ghost" onClick={async()=>{try{await lockFn();await signOutAdmin();}finally{setEditing(false);setGate('signed-out');}}}><LogOut/>{t('adminLogout')}</Button></div></div><div role="tablist" className="my-7 flex gap-2 overflow-x-auto border-b border-border">{tabs.map(item=><Button variant="ghost" role="tab" key={item.id} aria-selected={tab===item.id} className={`min-h-11 shrink-0 ${tab===item.id?'text-gold bg-surface-2':''}`} onClick={()=>setTab(item.id)}>{item.label}</Button>)}</div><div role="tabpanel">{tab==='submissions'&&<SubmissionPanel/>}{tab==='memberships'&&<MembershipsPanel readOnly={!editing}/>} {tab==='events'&&<EventsPanel readOnly={!editing}/>} {editing&&tab==='forms'&&<FormsPanel/>}{editing&&tab==='directory'&&<DirectoryPanel/>}{editing&&tab==='social'&&<SocialPanel/>}{editing&&tab==='partners'&&<PartnersPanel/>}{editing&&tab==='content'&&<ContentPanel/>}{editing&&tab==='account'&&<AccountPanel/>}</div>{unlock&&<Modal title={ar?'تأكيد صلاحية التعديل':'Confirm editing access'} onClose={()=>{setUnlock(false);setPassword('');}}><form className="space-y-5" onSubmit={async e=>{e.preventDefault();setBusy(true);setError('');try{const result=await unlockFn({data:{email,password}});if(!result.ok)throw Error('denied');setEditing(true);setUnlock(false);setPassword('');}catch{setPassword('');setError(ar?'البريد أو كلمة المرور غير صحيحة، أو الحساب غير مخوّل للتعديل.':'Incorrect credentials or account not authorized to edit.');}finally{setBusy(false);}}}><label className="field-label" htmlFor="unlock-email">{t('fieldEmail')}</label><input id="unlock-email" type="email" required className="input" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username"/><label className="field-label" htmlFor="unlock-password">{ar?'كلمة المرور':'Password'}</label><input id="unlock-password" type="password" required className="input" value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password"/>{error&&<p role="alert" className="text-danger">{error}</p>}<Button type="submit" disabled={busy}>{ar?'تأكيد':'Confirm'}</Button></form></Modal>}</section>;
 }

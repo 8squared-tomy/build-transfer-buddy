@@ -1,5 +1,5 @@
 import { ArrowLeft, CalendarDays, MapPin } from 'lucide-react';
-import { EventRegistrationForm } from '@/components/EventRegistrationForm';
+import { DynamicForm } from '@/components/DynamicForm';
 import { EventStateBadge } from '@/components/EventCard';
 import { Notice } from '@/components/FormField';
 import { useLanguage } from '@/i18n/LanguageProvider';
@@ -114,11 +114,11 @@ export function EventDetailPage({ eventId }: { eventId: string }) {
             <h2 className="text-2xl">{t('registerTitle')}</h2>
             <p className="text-sm text-muted">{t('registerIntro')}</p>
           </div>
-          <EventRegistrationForm
+          <DynamicForm
             key={event.id}
-            eventId={event.id}
-            state={state}
-            onRegistered={detail.reload}
+            scope={`event:${event.id}`}
+            eventState={state}
+            onSubmitted={detail.reload}
           />
         </aside>
       </div>

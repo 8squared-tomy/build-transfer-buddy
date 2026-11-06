@@ -18,7 +18,7 @@ import type { MembershipRequest, MembershipStatus } from '@/types/club';
 
 const STATUSES: MembershipStatus[] = ['new', 'accepted', 'waitlisted', 'rejected'];
 
-export function MembershipsPanel() {
+export function MembershipsPanel({readOnly=false}:{readOnly?:boolean}) {
   const { t, language } = useLanguage();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
@@ -180,7 +180,7 @@ export function MembershipsPanel() {
                       id={`status-${row.id}`}
                       className="input min-h-10 py-1"
                       value={row.status}
-                      disabled={busyId === row.id}
+                      disabled={readOnly || busyId === row.id}
                       onChange={(event) => handleStatusChange(row, event.target.value as MembershipStatus)}
                     >
                       {STATUSES.map((value) => (
@@ -200,7 +200,7 @@ export function MembershipsPanel() {
                         <span>{t('actionView')}</span>
                         <span className="sr-only">: {row.full_name}</span>
                       </button>
-                      <button
+                      {!readOnly && <button
                         type="button"
                         className="btn-ghost min-h-10 px-3 text-danger"
                         onClick={() => handleDelete(row)}
@@ -209,7 +209,7 @@ export function MembershipsPanel() {
                         <Trash2 className="h-4 w-4" aria-hidden="true" />
                         <span>{t('actionDelete')}</span>
                         <span className="sr-only">: {row.full_name}</span>
-                      </button>
+                      </button>}
                     </div>
                   </td>
                 </tr>

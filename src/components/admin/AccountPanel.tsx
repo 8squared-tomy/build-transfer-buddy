@@ -61,6 +61,7 @@ export function AccountPanel() {
       await updateAdminCredentials({
         ...(wantsEmail ? { email } : {}),
         ...(wantsPassword ? { password: newPassword } : {}),
+        ...(wantsPassword ? { current_password: currentPassword } : {}),
       });
       setSuccess({ emailChanged: wantsEmail });
       setCurrentPassword('');
