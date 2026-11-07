@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Save all current changes and confirm Git sync handoff; connection/status is controlled in Lovable's Git settings.
 - [ ] Smaller typography/icons, side overlay with accessibility, and single navigation on 404.
 - [ ] Managed circular member portraits and editable footer social links.
 - [ ] Read-only admin with downloads and server-verified editor unlock for the two fixed emails.
