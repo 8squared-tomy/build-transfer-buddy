@@ -14,7 +14,10 @@
 - Internal links are plain `<a href="/...">`; the root route intercepts same-site clicks for client-side navigation; why: avoids rewriting every link and dynamic nav array.
 - Club data code imports `@/lib/supabase` (an untyped view of the Cloud client) and uses its own types in `@/types/club`; why: source was written for an untyped client.
 - tsconfig keeps `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noPropertyAccessFromIndexSignature` off; why: migrated code was written without them.
-- Admin access = row in `public.admin_users` checked by `public.is_admin()` in RLS; visitor writes go only through SECURITY DEFINER RPCs (`submit_membership_request`, `register_for_event`).
+- Admin reads use protected `user_roles`; `is_admin()` requires editor eligibility plus a short-lived server-created grant bound to the Auth session ID, so read-only sessions cannot write even through direct API calls. Legacy admin_users is retained for compatibility, not authorization.
 - Theme colors are `--c-*` RGB triplets in `src/styles.css`, toggled via `data-theme`/`data-contrast`/`data-font` on `<html>`.
 - Fonts are served through bundled Fontsource CSS and the homepage cover through a project asset pointer preloaded only on the home route; why: avoid external render-blocking font services and make the first image discoverable early.
 - Event accommodation is validated by a shared registration schema and a database trigger; the extended registration RPC retains a legacy wrapper so older clients keep working.
+- Configurable forms use validated field definitions and revision snapshots on submissions; public writes use the rate-limited submit_club_form RPC, preserving legacy intake records for exports.
+- Member portraits live in a private Storage bucket with public read policies and fresh signed URLs, so workspace public-bucket restrictions do not prevent intended public portraits from rendering.
+- Navigation and accessibility share a Radix side sheet; the root layout owns the only page frame, including not-found rendering, to prevent duplicate headers.

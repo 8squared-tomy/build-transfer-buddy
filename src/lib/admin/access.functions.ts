@@ -9,7 +9,7 @@ export const unlockEditor = createServerFn({method:'POST'}).middleware([requireS
  const client=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false},global:{fetch:(input,init)=>{const h=new Headers(init?.headers);if(key.startsWith('sb_')&&h.get('Authorization')===`Bearer ${key}`)h.delete('Authorization');h.set('apikey',key);return fetch(input,{...init,headers:h});}}});
  const {data:verified,error:failed}=await client.auth.signInWithPassword(data);
  if(failed||verified.user?.id!==context.userId)return {ok:false};
- if(verified.session)await client.auth.signOut();
+ if(verified.session)await client.auth.signOut({scope:'local'});
  const sessionId=context.claims['session_id'];if(typeof sessionId!=='string'||!z.string().uuid().safeParse(sessionId).success)return {ok:false};
  const {supabaseAdmin}=await import('@/integrations/supabase/client.server');
  const {error:writeError}=await supabaseAdmin.from('editor_sessions').upsert({session_id:sessionId,user_id:context.userId,expires_at:new Date(Date.now()+30*60*1000).toISOString()});
